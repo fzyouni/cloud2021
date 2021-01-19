@@ -26,7 +26,7 @@ public class CloudPaymentController {
     private ICloudPaymentService cloudPaymentService;
 
     @PostMapping
-    public ResponseModel createPayment(@RequestBody String payUser, @RequestBody Double money) {
+    public ResponseModel createPayment(String payUser, Double money) {
         int i = this.cloudPaymentService.createPay(payUser, money);
         if (Objects.equals(i, 1)) {
             return ResponseModel.success();
