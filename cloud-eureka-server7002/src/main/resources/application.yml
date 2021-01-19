@@ -1,10 +1,10 @@
 server:
-  port: 7001
+  port: 7002
 
 
 eureka:
   instance:
-    hostname: eureka7001
+    hostname: eureka7002
   client:
     # 当前实例就是eureka服务端，不需要向自己注册自己,false表示不向注册中心注册自己
     register-with-eureka: false
@@ -15,7 +15,7 @@ eureka:
       # 单机 defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
       # 相互注册
       #defaultZone: http://eureka7002.com:7002/eureka/
-      defaultZone: http://localhost:7002/eureka/
+      defaultZone: http://localhost:7001/eureka/
   server:
     #关闭自我保护模式，保证不可用服务被及时删除
     enable-self-preservation: false
