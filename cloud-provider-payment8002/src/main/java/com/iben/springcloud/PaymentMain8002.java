@@ -11,9 +11,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 @MapperScan("com.iben.springcloud.mapper")
-public class PaymentMain001 {
+public class PaymentMain8002 {
 
     public static void main(String[] args) {
-        SpringApplication.run(PaymentMain001.class, args);
+        SpringApplication.run(PaymentMain8002.class, args);
     }
 }
