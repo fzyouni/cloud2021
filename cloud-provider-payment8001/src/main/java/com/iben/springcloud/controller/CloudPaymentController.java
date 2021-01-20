@@ -6,9 +6,12 @@ import com.iben.springcloud.enums.ReturnCodeType;
 import com.iben.springcloud.msg.ResponseModel;
 import com.iben.springcloud.service.ICloudPaymentService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -29,6 +32,9 @@ public class CloudPaymentController {
     @Value("${server.port}")
     private String port;
 
+    @Resource
+    private DiscoveryClient discoveryClient;
+
     @PostMapping
     public ResponseModel createPayment(String payUser, Double money) {
         int i = this.cloudPaymentService.createPay(payUser, money);
@@ -48,4 +54,16 @@ public class CloudPaymentController {
         return ResponseModel.success("查询成功，端口：" + port, pay);
     }
 
+    @GetMapping("/payment/discovery")
+    public Object discovery() {
+        List<String> services = this.discoveryClient.getServices();
+        for (String service : services) {
+            System.out.println(service);
+        }
+        List<ServiceInstance> instance = this.discoveryClient.getInstances("CLOUD-PAYMENT-SERVICE");
+        for (ServiceInstance serviceInstance : instance) {
+            System.out.println(serviceInstance.getServiceId() + ":" + serviceInstance.getHost() + ":" + serviceInstance.getPort() + ":" + serviceInstance.getUri());
+        }
+        return this.discoveryClient;
+    }
 }
