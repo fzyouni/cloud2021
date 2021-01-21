@@ -1,15 +1,21 @@
 package com.iben.springcloud.controller;
 
+import com.iben.springcloud.config.LoadBalanced;
+import com.iben.springcloud.enums.ReturnCodeType;
 import com.iben.springcloud.msg.ResponseModel;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @Author Ben <fzyouni@163.com>
@@ -24,6 +30,12 @@ public class OrderController {
 
     @Resource
     private RestTemplate restTemplate;
+
+    @Resource
+    private DiscoveryClient discoveryClient;
+
+    @Resource
+    private LoadBalanced loadBalanced;
 
     @PostMapping
     public ResponseModel generateOrder(String payUser, Double money) {
@@ -40,5 +52,18 @@ public class OrderController {
     @GetMapping("{id}")
     public ResponseModel getOrderInfo(@PathVariable Long id) {
         return this.restTemplate.getForObject(URL + "/" + id, ResponseModel.class);
+    }
+
+    @GetMapping("selfGetOrder")
+    public ResponseModel selfGetOrder(Long id) {
+        List<ServiceInstance> services = this.discoveryClient.getInstances("cloud-payment-service");
+        if (CollectionUtils.isEmpty(services)) {
+            return ResponseModel.error(ReturnCodeType.RETURN_NULL_ERROR, "未查找到可用的服务！");
+        }
+        ServiceInstance service = this.loadBalanced.instance(services);
+        String url = service.getUri() + "/cloud-payment/" + id;
+        System.out.println(url);
+        RestTemplate restTemplate1 = new RestTemplate();
+        return restTemplate1.getForObject(url, ResponseModel.class);
     }
 }
