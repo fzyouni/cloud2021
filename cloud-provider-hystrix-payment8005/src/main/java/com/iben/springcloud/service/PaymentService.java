@@ -8,4 +8,6 @@ public interface PaymentService {
     String payInfoOk();
 
     String payInfoTimeOut();
+
+    String payInfoCircuitBreaker(Integer id);
 }

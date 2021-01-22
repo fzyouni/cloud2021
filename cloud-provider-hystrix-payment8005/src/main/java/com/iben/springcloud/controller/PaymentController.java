@@ -4,6 +4,7 @@ import com.iben.springcloud.msg.ResponseModel;
 import com.iben.springcloud.service.PaymentService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -29,5 +30,10 @@ public class PaymentController {
     @GetMapping("/payment/payInfoTimeOut")
     public ResponseModel payInfoTimeOut() {
         return ResponseModel.success(this.paymentService.payInfoTimeOut());
+    }
+
+    @GetMapping("/payment/circuit/payInfo/{id}")
+    public ResponseModel payInfoCircuitBreaker(@PathVariable("id") Integer id) {
+        return ResponseModel.success(this.paymentService.payInfoCircuitBreaker(id));
     }
 }
