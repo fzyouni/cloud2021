@@ -25,6 +25,7 @@ public enum ReturnCodeType implements BaseEnum {
     RETURN_REPEAT_VALUE_ERROR("400107", "值重复异常！"),
     DELETE_EXIST_RELY_ERROR("400108", "删除值存在依赖异常！"),
     VALUE_EXIST_ERROR("400109", "值存在异常！"),
+    NOT_ACCESS_SERVER("400110", "服务不可访问！"),
 
     //登陆业务异常
     ACCOUNT_PASSWORD_ERROR("400201", "密码错误异常！"),

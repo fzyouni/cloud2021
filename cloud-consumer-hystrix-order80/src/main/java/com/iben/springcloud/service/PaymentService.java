@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Component
-@FeignClient(value = "cloud-provider-hystrix-payment")
+@FeignClient(value = "cloud-provider-hystrix-payment", fallback = PaymentServiceFallback.class)
 public interface PaymentService {
 
     @GetMapping("/payment/payInfoOk")
