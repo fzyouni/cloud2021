@@ -1,5 +1,6 @@
 package com.iben.springcloud.service;
 
+import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,7 @@ import java.util.concurrent.TimeUnit;
  * @create 2021-01-22 15:00
  **/
 @Service
+@DefaultProperties(defaultFallback = "globalPayInfoFallback")
 public class PaymentServiceImpl implements PaymentService {
 
     @Value("${server.port}")
@@ -26,9 +28,10 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    @HystrixCommand(fallbackMethod = "payInfoFallback", commandProperties = {
+    /*@HystrixCommand(fallbackMethod = "payInfoFallback", commandProperties = {
             @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000")
-    })
+    })*/
+    @HystrixCommand
     public String payInfoTimeOut() {
         int timeNumber = 3;
         try {
@@ -42,6 +45,10 @@ public class PaymentServiceImpl implements PaymentService {
 
 
     public String payInfoFallback() {
-        return "当前访问服务超时，请稍后再尝试！！！";
+        return String.format("当前线程池:%s,当前服务不可用，请稍后再进行尝试！！", Thread.currentThread().getName());
+    }
+
+    public String globalPayInfoFallback() {
+        return String.format("global当前线程池:%s,当前服务不可用，请稍后再进行尝试！！", Thread.currentThread().getName());
     }
 }
