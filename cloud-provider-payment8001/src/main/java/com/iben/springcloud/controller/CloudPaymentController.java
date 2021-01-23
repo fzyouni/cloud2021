@@ -8,11 +8,13 @@ import com.iben.springcloud.service.ICloudPaymentService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * <p>
@@ -24,6 +26,7 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("/cloud-payment")
+@RefreshScope
 public class CloudPaymentController {
 
     @Resource
@@ -31,6 +34,9 @@ public class CloudPaymentController {
 
     @Value("${server.port}")
     private String port;
+
+    @Value("${config.info}")
+    private String info;
 
     @Resource
     private DiscoveryClient discoveryClient;
@@ -65,5 +71,15 @@ public class CloudPaymentController {
             System.out.println(serviceInstance.getServiceId() + ":" + serviceInstance.getHost() + ":" + serviceInstance.getPort() + ":" + serviceInstance.getUri());
         }
         return this.discoveryClient;
+    }
+
+    /**
+     * 测试是否能拿到配置中心注册的配置
+     *
+     * @return
+     */
+    @GetMapping("getConfigValue")
+    public ResponseModel getConfigValue() {
+        return ResponseModel.success(info + "---UUid:" + UUID.randomUUID());
     }
 }
