@@ -8,8 +8,11 @@ spring:
       config:
         server-addr: 81.69.4.237:8848 #Nacos作为配置中心地址
         file-extension: yaml #指定yaml格式配置
-
-
+    sentinel:
+      transport:
+        dashboard: 121.4.66.32:8080
+        port: 8719
+        clientIp: 121.4.66.32
 management:
   endpoints:
     web:

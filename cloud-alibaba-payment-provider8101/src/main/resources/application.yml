@@ -8,6 +8,11 @@ spring:
     nacos:
       discovery:
         server-addr: 81.69.4.237:8848
+    sentinel:
+      transport:
+        dashboard: 121.4.66.32:8080
+        port: 8719
+        clientIp: 121.4.66.32
   profiles:
     active: dev
 
