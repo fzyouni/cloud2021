@@ -12,7 +12,6 @@ spring:
       transport:
         dashboard: 121.4.66.32:8080
         port: 8719
-        clientIp: 121.4.66.32
 management:
   endpoints:
     web:
